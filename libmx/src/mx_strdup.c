@@ -1,18 +1,24 @@
 #include "libmx.h"
 
 char *mx_strdup(const char *str) {
-    if (str == NULL || *str == '\0') {
+    if (str == NULL) {
         return NULL;
     }
 
-    size_t str_len = mx_strlen(str);
-    char *dup = mx_strnew(str_len + 1); 
-
-    if (dup == NULL) {
-        return NULL;
+    int length = 0;
+    while (str[length] != '\0') {
+        length++;
     }
 
-    mx_strcpy(dup, str);
+    char *duplicate = (char *)malloc((length + 1) * sizeof(char));
 
-    return dup;
+    if (duplicate == NULL) {
+        return NULL; 
+    }
+
+    for (int i = 0; i <= length; i++) {
+        duplicate[i] = str[i];
+    }
+
+    return duplicate;
 }

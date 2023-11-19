@@ -7,6 +7,7 @@
 #include <fcntl.h>
 #include <stdio.h>
 
+
 #ifdef __MACH__
 #include <malloc/malloc.h>
 #else
@@ -23,6 +24,14 @@ typedef struct s_list {
 int mx_strncmp(const char *s1, const char *s2, int n); 
 int mx_isspace(int c);
 char* mx_strchr(const char*s, int c);
+
+void mx_free(void *ptr);
+void *mx_memalloc(size_t size);
+char *mx_strtok(char *str, const char delim);
+bool mx_isdigit(int c);
+int mx_atoi(const char *str, int *number);
+
+int mx_count_wordssec(const char *str, char c);
 
 void mx_printchar(char c);
 void mx_print_unicode(wchar_t c);
@@ -54,7 +63,7 @@ char *mx_strcat(char *restrict s1, const char *restrict s2);
 char *mx_strstr(const char *haystack, const char *needle); 
 int mx_get_substr_index(const char *str, const char *sub);
 int mx_count_substr(const char *str, const char *sub);
-int mx_count_words(const char *str, char c);
+int mx_count_words(char **arr);
 char *mx_strnew(const int size);
 char *mx_strtrim(const char *str);
 char *mx_del_extra_spaces(const char *str);
@@ -80,6 +89,6 @@ void mx_push_back(t_list **list, void *data);
 void mx_pop_front(t_list **head);
 void mx_pop_back(t_list **head);
 int mx_list_size(t_list *list);
-t_list *mx_sort_list(t_list *lst, bool (*cmp)(void *, void *)); 
+t_list *mx_sort_list(t_list *lst, void *peak, bool(*cmp)(void *, void *, void *));
 
 #endif

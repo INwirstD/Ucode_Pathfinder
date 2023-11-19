@@ -1,39 +1,49 @@
-INCD = inc
-OBJD = obj
-SRCD = src
-LIBD = libmx
-LIB = $(LIBD)/libmx.a
-EXE = pathfinder
-SRCS := $(wildcard $(SRCD)/*.c)
-OBJS := $(patsubst $(SRCD)/%.c, $(OBJD)/%.o, $(SRCS))
 CC = clang
 CFLAGS = -std=c11 -Wall -Wextra -Werror -Wpedantic
+
+NAME = pathfinder
+
+INC = inc
+OBJ = obj
+SRC = src
+LIBD = libmx
+LIB = $(LIBD)/libmx.a
+
+RM := rm -rf
+SRCS := $(wildcard $(SRC)/*.c)
+OBJS := $(patsubst $(SRC)/%.c, $(OBJ)/%.o, $(SRCS))
 
 .PHONY: all install clean uninstall reinstall
 
 all: install
 
-install: $(LIB) $(EXE)
+install: $(LIB) $(NAME)
 
 $(LIB):
-	make -C $(LIBD)
+	@make -C $(LIBD)
 
-$(EXE): $(OBJS)
-	$(CC) $(CFLAGS) -I$(INCD) $^ $(LIB) -o $@
+$(NAME): $(OBJS)
+	@$(CC) $(CFLAGS) -I$(INC) $^ $(LIB) -o $@
+	@echo "[$(NAME)] created successfully."
 
-$(OBJS): $(OBJD)/%.o: $(SRCD)/%.c | $(OBJD)
-	$(CC) $(CFLAGS) -I$(INCD) -I$(LIBD)/$(INCD) -c $< -o $@
+$(OBJS): $(OBJ)/%.o: $(SRC)/%.c | $(OBJ)
+	@$(CC) $(CFLAGS) -I$(INC) -I$(LIBD)/$(INC) -c $< -o $@
+	@echo "[$(NAME)] compiled: $<"
 
-$(OBJD):
-	mkdir -p $(OBJD)
+$(OBJ):
+	@mkdir -p $(OBJ)
 
 uninstall: clean
-	make -C $(LIBD) uninstall
-	rm -f $(EXE)
+	@make -C $(LIBD) uninstall
+	@$(RM) $(NAME)
+	@echo "[$(NAME)] uninstalled."
 
 clean:
-	make -C $(LIBD) clean
-	rm -rf $(OBJD)
+	@make -C $(LIBD) clean
+	@$(RM) $(OBJ)
+	@echo "[$(NAME)] cleaned."
 
 reinstall: uninstall all
+
+
 

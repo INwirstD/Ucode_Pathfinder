@@ -2,40 +2,31 @@
 
 char *mx_itoa(int number) {
     int temp = number;
-    int length = 0;
+    int length = 1;
 
-    if (temp == 0) {
-        length = 1;
-    } else if (temp < 0) {
-        temp = -temp;
+    while (temp /= 10) {
         length++;
     }
 
-    while (temp > 0) {
-        temp /= 10;
-        length++;
+    char *result = (char *)malloc((length + 1) * sizeof(char));
+
+    if (result == NULL) {
+        return NULL;
     }
-
-    char *str = (char *)malloc(length + 1);
-
-    if (str == NULL) {
-        return NULL; 
-    }
-
-    str[length] = '\0'; 
 
     if (number < 0) {
+        result[0] = '-';
         number = -number;
-        str[0] = '-';
-    } else if (number == 0) {
-        str[0] = '0';
     }
 
-    for (int i = length - 1; i > 0; i--) {
-        str[i] = '0' + (number % 10);
+    for (int i = length - 1; i >= 0; i--) {
+        result[i] = (number % 10) + '0';
         number /= 10;
     }
 
-    return str;
+    result[length] = '\0'; 
+
+    return result;
 }
+
 
